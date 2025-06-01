@@ -5,6 +5,7 @@ import logging
 from metrics import get_system_metrics, load_config, send_to_cloud
 from Monitering.alert import send_slack_alert
 from pymongo import MongoClient
+from metrics import get_system_metrics, load_config, send_to_cloud, send_to_influxdb
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -28,8 +29,9 @@ if __name__ == "__main__":
     interval = config.get("interval", 60)  # default to 60 seconds
 
     while True:
-        metrics = get_system_metrics(config)
-        logging.info(f"Collected Metrics: {metrics}")
+        metrics = get_system_metrics(config) 
+        logging.info(f"Collected Metrics: {metrics}")        # Logging
+        send_to_influxdb(metrics, config)                    #send metrics to influx db
 
         # Save to MongoDB
         if mongo_enabled:

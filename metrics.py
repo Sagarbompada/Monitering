@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import threading , datetime
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+from influxdb import InfluxDBClient
 
 
 # Load configuration from config.yaml
@@ -90,6 +91,36 @@ def send_to_cloud(config, metrics):
             print(f"Failed to send metrics to cloud. Status code: {response.status_code}")
     except Exception as e:
         print(f"Error sending metrics to cloud: {e}")
+
+
+def send_to_influxdb(metrics, config):
+    try:
+        client = InfluxDBClient(host="localhost", port=8086)
+        db_name = config.get("influxdb_database", "metrics_db")
+
+        # Create DB if not exists
+        client.create_database(db_name)
+        client.switch_database(db_name)
+
+        json_body = [
+            {
+                "measurement": "system_metrics",
+                "tags": {
+                    "host": metrics["hostname"]
+                },
+                "time": int(metrics["timestamp"] * 1e9),  # nanoseconds
+                "fields": {
+                    "cpu_total_percent": float(metrics["cpu_total_percent"]),
+                    "memory_percent": float(metrics["memory"]["percent"]),
+                }
+            }
+        ]
+
+        client.write_points(json_body)
+        print("Metrics written to InfluxDB.")
+
+    except Exception as e:
+        print(f"Error writing to InfluxDB: {e}")
 
 
 

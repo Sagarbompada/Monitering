@@ -1,0 +1,8 @@
+Flask
+fastapi
+uvicorn
+psutil
+requests
+pymongo
+pyyaml
+influxdb
