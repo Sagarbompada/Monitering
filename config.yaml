@@ -1,9 +1,12 @@
-interval: 10
-cloud_endpoint: "http://ingestion:8000/ingest"
+
+
 thresholds:
   cpu: [50, 75, 90]
   memory: [50, 75, 90]
   disk: [50, 75, 90]
 cooldown_seconds: 300
+influxdb_database: "metrics_db"
+interval: 1000
 
-slack_webhook: "https://hooks.slack.com/services/XXX/YYY/ZZZ"
+cloud_endpoint: "http://ingestion:8000/ingest"
+slack_webhook: "https://hooks.slack.com/services/..."

@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from pymongo import MongoClient
+from metrics import get_system_metrics, load_config
 
 app = FastAPI()
 buffer = []
@@ -49,4 +50,4 @@ async def ingest(payload: Request):
 
 @app.get("/buffer")
 def get_buffer():
-    return buffer[-10:]  # Return last 100 records
+    return buffer[-10:]  # Return last 10 records

@@ -52,32 +52,31 @@ def get_system_metrics(config):
         memory_status = f"Normal: {memory_percent}%"
 
     # Check for Disk usage against the thresholds
-    disk_percent = metrics["disk"]['/']['percent']  # assuming checking root partition
-    disk_status = ""  
-    if disk_percent >= config['thresholds']['disk'][2]:
-        disk_status = f"Critical: {disk_percent}%"
-    elif disk_percent >= config['thresholds']['disk'][1]:
-        disk_status = f"High: {disk_percent}%"
-    elif disk_percent >= config['thresholds']['disk'][0]:
-        disk_status = f"Moderate: {disk_percent}%"
-    else:
-        disk_status = f"Normal: {disk_percent}%"
+    # disk_percent = metrics["disk"]['/']['percent']  # assuming checking root partition
+    # disk_status = ""  
+    # if disk_percent >= config['thresholds']['disk'][2]:
+    #     disk_status = f"Critical: {disk_percent}%"
+    # elif disk_percent >= config['thresholds']['disk'][1]:
+    #     disk_status = f"High: {disk_percent}%"
+    # elif disk_percent >= config['thresholds']['disk'][0]:
+    #     disk_status = f"Moderate: {disk_percent}%"
+    # else:
+    #     disk_status = f"Normal: {disk_percent}%"
 
-    print(metrics["disk"].keys())
-
+  
     # Update the metrics dictionary with the status of each resource
     metrics.update({
         "cpu_status": cpu_status,
         "memory_status": memory_status,
-        "disk_status": disk_status
+        # "disk_status": disk_status
     })
 
     return metrics
 
 
-# config = load_config()
-# metrics = get_system_metrics(config)
-# print(json.dumps(metrics, indent=0))
+config = load_config()
+metrics = get_system_metrics(config)
+print(json.dumps(metrics, indent=0))
 
 
 
